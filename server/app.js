@@ -6,6 +6,10 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const expressValidator = require('express-validator');
 const passport = require('passport');
+const mongoose = require('mongoose');
+const {secret, dbURL} = require('./config/main');
+
+mongoose.connect(dbURL, {useMongoClient: true});
 
 const api = require('./routes/api');
 
@@ -22,8 +26,6 @@ app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator())
-
-const secret = process.env.SESSION_SECRET || 'devsecret'
 app.use(session({ secret, resave: false, saveUninitialized: false}));
 app.use(passport.initialize());
 app.use(passport.session());
