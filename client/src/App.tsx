@@ -7,10 +7,11 @@ import {
 const App = () => (
   <BrowserRouter>
     <Switch>
+      <Route path="/polls" component={NotImplemented} />
+      <Route path="/polls/create" component={NotImplemented} />
+      <Route path="/polls/mine" component={NotImplemented} />
+      <Route path="/polls/:id" component={NotImplemented} />  
       <Route exact={true} path="/" component={Home} />
-      <Route path="/profile/:id" component={NotImplemented} />
-      <Route path="/vote/create" component={NotImplemented} />
-      <Route path="/vote/:id" component={NotImplemented} />
       <Route component={NotFound} />
     </Switch>
   </BrowserRouter>
