@@ -1,22 +1,29 @@
 import * as React from 'react';
+import { 
+  BrowserRouter, 
+  Route, 
+  Switch,  } from 'react-router-dom';
 import './App.css';
 
-const logo = require('./logo.svg');
+const App = () => (
+  <BrowserRouter>
+    <Switch>
+      <Route exact={true} path="/" component={Home} />
+      <Route path="/match" component={DisplayPath} />
+      <Route component={NotFound} />
+    </Switch>
+  </BrowserRouter>
+);
 
-class App extends React.Component {
-  render() {
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
-}
+const DisplayPath = (props: any) => (
+  <div>DisplayPath: {props.match.url}
+    <Route path={props.match.url + '/this'} component={() => <div>this</div>} />
+    <Route path={props.match.url + '/that'} component={() => <div>that</div>} />
+  </div>
+);
+
+const Home = () => <div>Home</div>;
+
+const NotFound = () => <div>Uh Oh</div>;
 
 export default App;
