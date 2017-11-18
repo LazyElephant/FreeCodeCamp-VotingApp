@@ -6,26 +6,30 @@ module.exports = function addPollRoutes(router) {
 }
 
 function indexRoute(router) {
-  router.get('polls', function pollsIndex(req, res, next) {
+  router.get('/polls', function pollsIndex(req, res, next) {
     // TODO: get data from db and send as json
-    res.json(200, {success: true, polls: ["here's one", "here's another"]})
+    Poll.find({}, function(err, polls) {
+      if (err) return next(err);
+
+      res.json(200, {success: true, polls})
+    });
   });
 }
 
 function singlePollRoute(router) {
-  router.get('polls/:id', function pollById(req, res, next) {
+  router.get('/polls/:id', function pollById(req, res, next) {
     // TODO: get poll by id from db
   });
 }
 
 function deleteRoute(router) {
-  router.delete('polls/:id', function deletePoll(req, res, next) {
+  router.delete('/polls/:id', function deletePoll(req, res, next) {
     // TODO: authenticate with jwt and verify user matches poll owner
   });
 }
 
 function createRoute(router) {
-  router.post('polls/create', function createPoll(req, res, next) {
+  router.post('/polls/create', function createPoll(req, res, next) {
     // TODO: authenticate with jwt
   });
 }
