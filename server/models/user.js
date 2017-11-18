@@ -15,9 +15,9 @@ const UserSchema = mongoose.Schema({
   salt: String,
 });
 
-UserSchema.plugin(uniqueValidator, {message: 'is already taken.'});
+UserSchema.plugin(mongooseUnique, {message: 'is already taken.'});
 
-UserSchema.methods.setPassword = function setPassword(password) {
+UserSchema.methods.hashPassword = function hashPassword(password) {
   this.salt = crypto.randomBytes(16).toString('hex');
   this.hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
 }
@@ -26,12 +26,5 @@ UserSchema.methods.verifyPassword = function verifyPassword(password) {
   const hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
   return this.hash === hash;
 }
-
-UserSchema.pre('save', function preSave(next) {
-  if (this.isModified('hash') || this.isNew) {
-    this.sePassword(password);
-  }
-  next();
-});
 
 module.exports =  mongoose.model('User', UserSchema);
