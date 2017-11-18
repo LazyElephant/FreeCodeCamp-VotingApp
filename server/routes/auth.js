@@ -8,7 +8,11 @@ module.exports = function addAuthRoutes(router) {
       if (err) return next(err);
       if (!user) return res.json({success: false, message: "No user with that name exists"});
       
-      res.json({success: true, message:"Logged in"});
+      req.login(user, function(err) {
+        if (err) return next(err);
+
+        res.json({success: true, message:"Logged in"});
+      });
     })(req, res, next);
   });
   
@@ -20,12 +24,19 @@ module.exports = function addAuthRoutes(router) {
   
     user.save(function(err, user) {
       if (err) return next(err);
-  
-      res.json({
-        success: true, 
-        message:"User created successfully",
+      
+      req.login(user, function(err) {
+        if (err) return next(err);
+        res.json({success: true, message:"User created successfully",
+        });
       });
-  
     });
+  });
+
+  router.get('/logout', function logout(req, res, next) {
+    if (!req.user) return res.json({success:false, message:"You must be logged in to log out"});
+    req.logout();
+    delete req.session;
+    res.json({success: true, message: "Logged out"});
   });
 }
