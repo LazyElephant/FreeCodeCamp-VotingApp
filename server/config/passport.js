@@ -32,15 +32,15 @@ function addLocalStrategy(passport) {
 
 function addJwtStrategy(passport) {
   let opts = {
-    jwtFromRequest: ExtractJwt.fromAuthHeader(),
-    secretOrKey: secret
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: secret,
   };
 
   passport.use(new JwtStrategy(opts, function jwtAuth(payload, done) {
     User.findOne({id: payload.id}, function(err, user) {    
       if (err) { return done(err, false); }
-      if (!user) { done(null, false); }
-      else { done(null, user); }
+      if (!user) { return done(null, false); }
+      else { return done(null, user); }
     });
   }));
 }
