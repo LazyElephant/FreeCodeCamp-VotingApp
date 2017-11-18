@@ -9,7 +9,11 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const {secret, dbURL} = require('./config/main');
 
+mongoose.Promise = global.Promise;
 mongoose.connect(dbURL, {useMongoClient: true});
+const db = mongoose.connection;
+db.on('error', (err) => console.error(err));
+db.once('open', () => console.log('db connected'));
 
 const api = require('./routes/api');
 
@@ -49,7 +53,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.end();
+  res.json({success: false, message});
 });
 
 module.exports = app;
