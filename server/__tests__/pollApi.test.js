@@ -114,7 +114,7 @@ describe("the polls api", () => {
             expect(res.body.message).toBe("Unauthenticated users can only vote once per ip");
             done();
           });
-      })
+      });
     });
   });
 })
