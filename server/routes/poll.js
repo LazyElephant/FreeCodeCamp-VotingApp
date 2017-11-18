@@ -16,7 +16,7 @@ function indexRoute(router) {
       if (err) 
         return next(err);
 
-      res.json(200, {polls})
+      res.status(200).json({polls})
     });
   });
 }
@@ -27,7 +27,7 @@ function singlePollRoute(router) {
       if (err) 
         return next(err);
       if (!poll) 
-        return res.status(404).json({message: "Poll not found"});
+        return res.status(404).json({message: "Not found"});
       res.status(200).json({poll});
     });
   });
@@ -60,7 +60,7 @@ function updateRoute(router) {
       poll.save(function(err, poll) {
         if (err) return next(err);
 
-        res.status(200).json({message: "Saved successfully", poll});
+        res.status(200).json({message: "Update successful", poll});
       });
     })
   });
