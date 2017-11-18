@@ -18,13 +18,12 @@ function addLogin(router) {
     // TODO: validate username/password
     passport.authenticate('local', function(err, user, info) {
       if (err) return next(err);
-      if (!user) return res.json(401, {success: false, message: "log in failed"});
+      if (!user) return res.status(401).json({message: "log in failed"});
       
       req.login(user, function(err) {
         if (err) return next(err);
 
-        res.json(200, {
-          success: true, 
+        res.status(200).json({
           message:"Logged in",
           username: user.username,
           token: generateJwt(user.username),
@@ -47,8 +46,7 @@ function addRegister(router) {
       req.login(user, function(err) {
         if (err) return next(err);
 
-        res.json(200, {
-          success: true, 
+        res.status(200).json({
           message:"User created successfully",
           username: user.username,
           token: generateJwt(user.username),
@@ -61,9 +59,9 @@ function addRegister(router) {
 function addLogout(router) {
   router.get('/logout', function logout(req, res, next) {
     console.log(req.session);
-    if (!req.user) return res.json(400, {success:false, message:"You must be logged in to log out"});
+    if (!req.user) return res.status(400).json({message:"You must be logged in to log out"});
     req.logout();
     delete req.session;
-    res.json({success: true, message: "Logged out"});
+    res.status(200).json({message: "Logged out"});
   });
 }
