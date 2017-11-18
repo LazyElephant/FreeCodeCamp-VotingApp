@@ -28,7 +28,7 @@ const app = express();
 app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator())
 app.use(session({ secret, resave: false, saveUninitialized: false}));
 
