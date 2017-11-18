@@ -1,13 +1,10 @@
 const app = require('../app');
 const request = require('supertest')(app);
-const User = require('../models/user');
+const mongoose = require('mongoose');
 
-beforeAll((done) => {
-  User.remove({}, () => done());
-});
-
-afterAll((done) => {
-  User.remove({}, () => done());
+afterAll(async () => {
+  await mongoose.connection.collections.users.drop();
+  await mongoose.disconnect();
 });
 
 describe("The authentication Api", () => {
