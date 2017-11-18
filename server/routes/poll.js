@@ -3,22 +3,28 @@ const passport = require('passport');
 
 module.exports = function addPollRoutes(router) {
   indexRoute(router);
+  singlePollRoute(router);
+  // deleteRoute(router);
+  // createRoute(router);
 }
 
 function indexRoute(router) {
   router.get('/polls', function pollsIndex(req, res, next) {
-    // TODO: get data from db and send as json
     Poll.find({}, function(err, polls) {
       if (err) return next(err);
 
-      res.json(200, {success: true, polls})
+      res.json(200, {polls})
     });
   });
 }
 
 function singlePollRoute(router) {
   router.get('/polls/:id', function pollById(req, res, next) {
-    // TODO: get poll by id from db
+    Poll.findOne({_id: req.params.id}, function(err, poll) {
+      if (err) return next(err);
+      if (!poll) return res.status(404).json({message: "Poll not found"});
+      res.status(200).json({poll});
+    });
   });
 }
 
