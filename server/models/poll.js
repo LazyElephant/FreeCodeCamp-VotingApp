@@ -1,5 +1,16 @@
 const mongoose = require('mongoose');
 
+const OptionSchema = mongoose.Schema({
+  option: {
+    type: String,
+    required: true,
+  },
+  votes: {
+    type: Number,
+    default: 0,
+  },
+});
+
 const PollSchema = mongoose.Schema({
   owner: {
     type: String,
@@ -15,15 +26,5 @@ const PollSchema = mongoose.Schema({
   },
 });
 
-const OptionSchema = mongoose.Schema({
-  option: {
-    type: String,
-    required: true,
-  },
-  votes: {
-    type: Number,
-    default: 0,
-  },
-});
 
 module.exports = mongoose.model("Poll", PollSchema);
