@@ -1,4 +1,3 @@
-const {Strategy: JwtStrategy, ExtractJwt} = require('passport-jwt');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/user');
 const {secret} = require('./main');
