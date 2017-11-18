@@ -1,16 +1,12 @@
 const passport = require('passport');
 const User = require('../models/user');
-const jwt = require('jsonwebtoken');
 const {secret} = require('../config/main');
+const {checkAuthentication} = require('./route-utils');
 
 module.exports = function addAuthRoutes(router) {
   addLogin(router);
   addLogout(router);
   addRegister(router);
-}
-
-function generateJwt(username) {
-  return jwt.sign(username, secret);
 }
 
 function addLogin(router) {
@@ -26,7 +22,6 @@ function addLogin(router) {
         res.status(200).json({
           message:"Logged in",
           username: user.username,
-          token: generateJwt(user.username),
         });
       });
     })(req, res, next);
@@ -49,7 +44,6 @@ function addRegister(router) {
         res.status(200).json({
           message:"User created successfully",
           username: user.username,
-          token: generateJwt(user.username),
         });
       });
     });
@@ -58,10 +52,7 @@ function addRegister(router) {
 
 function addLogout(router) {
   router.get('/logout', function logout(req, res, next) {
-    console.log(req.session);
-    if (!req.user) return res.status(400).json({message:"You must be logged in to log out"});
     req.logout();
-    delete req.session;
     res.status(200).json({message: "Logged out"});
   });
 }

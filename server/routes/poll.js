@@ -1,5 +1,6 @@
 const Poll = require('../models/poll');
 const passport = require('passport');
+const {checkAuthentication} = require('./route-utils');
 
 module.exports = function addPollRoutes(router) {
   indexRoute(router);
@@ -67,7 +68,7 @@ function updateRoute(router) {
 
 function deleteRoute(router) {
   router.delete('/polls/:id', 
-    passport.authenticate('jwt'), 
+    checkAuthentication,  
     function deletePoll(req, res, next) 
     {
       Poll.remove({_id: req.params.id, owner: req.user.username}, function(err, info) {
@@ -85,7 +86,7 @@ function deleteRoute(router) {
 
 function createRoute(router) {
   router.post('/polls/create', 
-    passport.authenticate('jwt'), 
+    checkAuthentication,
     function createPoll(req, res, next) {
       // TODO: validate poll data
       const {title, options} = req.body;

@@ -5,7 +5,6 @@ const {secret} = require('./main');
 
 module.exports = function configPassport(passport) {
   addLocalStrategy(passport);
-  addJwtStrategy(passport);
 
   passport.serializeUser(function(user, done) {
     done(null, user);
@@ -26,21 +25,6 @@ function addLocalStrategy(passport) {
       if (!user.verifyPassword(password)) { return done(null, false); }
 
       return done(null, user);
-    });
-  }));
-}
-
-function addJwtStrategy(passport) {
-  let opts = {
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: secret,
-  };
-
-  passport.use(new JwtStrategy(opts, function jwtAuth(payload, done) {
-    User.findOne({id: payload.id}, function(err, user) {    
-      if (err) { return done(err, false); }
-      if (!user) { return done(null, false); }
-      else { return done(null, user); }
     });
   }));
 }
