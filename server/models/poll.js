@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-
-const OptionSchema = mongoose.Schema({
+const Schema = mongoose.Schema;
+const OptionSchema = Schema({
   option: {
     type: String,
     required: true,
@@ -11,7 +11,8 @@ const OptionSchema = mongoose.Schema({
   },
 });
 
-const PollSchema = mongoose.Schema({
+// TODO: update schema to store users/ips who have already voted
+const PollSchema = Schema({
   owner: {
     type: String,
     required: true,
@@ -21,9 +22,10 @@ const PollSchema = mongoose.Schema({
     required: true,
   },
   options: {
-    type: [OptionSchema],
+    type: Schema.Types.Mixed,
     required: true,
   },
+  uservotes: [String]
 });
 
 
