@@ -25,7 +25,8 @@ const PollSchema = Schema({
     type: Schema.Types.Mixed,
     required: true,
   },
-  uservotes: [String]
+  uservotes: [String],
+  ipvotes: [String],
 });
 
 
