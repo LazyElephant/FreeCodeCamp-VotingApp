@@ -27,8 +27,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator())
 app.use(session({ secret, resave: false, saveUninitialized: false}));
+
+const configurePassport = require('./config/passport');
 app.use(passport.initialize());
 app.use(passport.session());
+configurePassport(passport);
 
 app.use('/api', api);
 
