@@ -14,7 +14,7 @@ function addLogin(router) {
     // TODO: validate username/password
     passport.authenticate('local', function(err, user, info) {
       if (err) return next(err);
-      if (!user) return res.status(401).json({message: "log in failed"});
+      if (!user) return res.status(401).json({message: "Bad credentials"});
       
       req.login(user, function(err) {
         if (err) return next(err);
@@ -36,10 +36,12 @@ function addRegister(router) {
     user.hashPassword(req.body.password);
   
     user.save(function(err, user) {
-      if (err) return next(err);
+      if (err) 
+        return res.status(400).json({message:"User already exists"});
       
       req.login(user, function(err) {
-        if (err) return next(err);
+        if (err) 
+          return next(err);
 
         res.status(200).json({
           message:"User created successfully",
