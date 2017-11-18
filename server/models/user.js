@@ -22,13 +22,13 @@ UserSchema.methods.setPassword = function setPassword(password) {
   this.hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
 }
 
-UserSchema.methods.validatePassword(password) {
+UserSchema.methods.verifyPassword = function verifyPassword(password) {
   const hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
   return this.hash === hash;
 }
 
 UserSchema.pre('save', function preSave(next) {
-  if (this.isModified('password') || this.isNew) {
+  if (this.isModified('hash') || this.isNew) {
     this.sePassword(password);
   }
   next();
