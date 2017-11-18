@@ -89,6 +89,8 @@ describe("the polls api", () => {
     });
   });
 
+  // TODO: unauthenticated users add new options
+  // TODO: authenticated users can add options to polls
   describe("PUT /api/polls/:id", () => {
     describe("An unauthenticated user can vote once per IP", () => {
       test("the first vote works", (done) => {
@@ -116,5 +118,17 @@ describe("the polls api", () => {
           });
       });
     });
+
+    describe("An authenticated user can vote on each poll once", () => {
+
+    });
+  });
+
+  describe("Delete /api/polls/:id", () => {
+
+  })
+
+  describe("/api/polls/create", () => {
+
   });
 })
