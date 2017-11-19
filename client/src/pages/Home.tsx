@@ -35,6 +35,7 @@ class Home extends React.Component<{}, HomeStateType> {
   render() {
     const {polls} = this.state;
     
+    // TODO: create a component to represent a small poll element
     return (
       <div>
         <h1>Home</h1>
