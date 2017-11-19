@@ -1,39 +1,38 @@
 import * as React from 'react';
 
-interface PollState {
-  options: any;
-  owner: string;
-  title: string;
-}
-
-class SinglePoll extends React.Component<any, PollState> {
-  public static defaultProps = {
-    owner: '',
-    title: '',
-    options: {}
-  };
-
+class SinglePoll extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
-    const {poll} = this.props.location && this.props.location.state;
-    const {options, owner, title} = poll || this.props;
+
     this.state = {
-      options,
-      owner,
-      title
+      owner: '',
+      title: '',
+      options: {}
     };
   }
+
+  componentDidMount() {
+    const {id} = this.props.match.params;
+
+    fetch(`/api/polls/${id}`)
+      .then(res => res.json())
+      .then(json => this.setState(json.poll));
+  }
+
   render() {
     const {title, owner, options} = this.state;
     return (
       <div>
         <h1>{title}</h1>
-        <p>by {owner}</p>
+        <p>{owner}</p>
         <ul>
           {
             Object
               .keys(options)
-              .map((opt: string, i: number) => <li key={i}>{opt}</li>)
+              .map((k: string, i: number) => 
+                <li key={i}>
+                  {k} : {options[k]}
+                </li>)
           }
         </ul>
       </div>
