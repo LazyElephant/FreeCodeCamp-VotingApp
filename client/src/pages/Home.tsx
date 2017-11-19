@@ -1,7 +1,8 @@
 import * as React  from 'react';
+import { Link } from 'react-router-dom';
 
-interface HomeStateType{
-  polls: string[]
+interface HomeStateType {
+  polls: string[];
 }
 
 class Home extends React.Component<{}, HomeStateType> {
@@ -13,12 +14,23 @@ class Home extends React.Component<{}, HomeStateType> {
     };
   }
   _renderPoll = (poll: any) => {
-    const {title, options} = poll;
+    const {title, options, _id} = poll;
     return (
-      <div>
-        <h3>{title}</h3>
+      <div key={_id}>
+        <h3>
+          {title}
+        </h3>
+        <Link 
+          to={{ pathname: `/polls/${_id}`, state: {poll}}}
+        >
+          click
+        </Link>
         <ul>
-          {Object.keys(options).map((opt:string) => <li>{opt}</li>)}
+          {
+            Object
+              .keys(options)
+              .map((opt: string, i: number) => <li key={i}>{opt}</li>)
+          }
         </ul>
       </div>
     );
@@ -28,7 +40,7 @@ class Home extends React.Component<{}, HomeStateType> {
     fetch('/api/polls')
       .then(res => res.json())
       .then(json => {
-        this.setState({polls: json.polls})
+        this.setState({polls: json.polls});
       });
   }
 

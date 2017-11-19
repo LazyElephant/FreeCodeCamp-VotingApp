@@ -20,7 +20,7 @@ const App = () => (
 );
 
 // const Home = () => <div>Home</div>;
-const NotImplemented = () => <div>Coming Soon...</div>
+const NotImplemented = () => <div>Coming Soon...</div>;
 const NotFound = () => <div>Uh Oh</div>;
 
 export default App;
