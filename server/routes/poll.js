@@ -8,6 +8,7 @@ module.exports = function addPollRoutes(router) {
   deleteRoute(router);
   createRoute(router);
   updateRoute(router);
+  myPolls(router);
 }
 
 function indexRoute(router) {
@@ -109,5 +110,16 @@ function createRoute(router) {
     
         res.status(200).json({message: "Poll created successfully", poll});
       });
+  });
+}
+
+function myPolls(router) {
+  router.get('/api/mypolls', checkAuthentication, function myPolls(req, res, next) {
+    Poll.find({owner: req.user.username}, function(err, polls) {
+      if (err)
+        return next(err);
+      
+        res.status(200).json({polls});
+    });
   });
 }
