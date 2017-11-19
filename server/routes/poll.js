@@ -41,7 +41,6 @@ function updateRoute(router) {
       if (!poll) 
         return res.status(400).json({message: "Bad Request"});
       
-      // TODO: check that poll hasn't been modified by this ip/user
       const userVoted = (req.user && poll.uservotes.indexOf(req.user.username) !== -1)
       if (userVoted) 
         return res.status(400).json({message: "Each user can only vote once"});
@@ -49,12 +48,15 @@ function updateRoute(router) {
       const ipVoted = (poll.ipvotes.indexOf(req.ip) !== -1)
       if (ipVoted && !req.user) 
         return res.status(400).json({message: "Unauthenticated users can only vote once per ip"})
-      // TODO: validate option parameter
+      
       const opt = req.body.option;
       if (poll.options.hasOwnProperty(opt)) {
         poll.options[opt]++;
-      } else {
+      } else if (req.user) {
+        // sanitize new opt
         poll.options[opt] = 1;
+      } else {
+        return res.status(401).json({message: "Unauthenticated users can't add new options"});
       }
       req.user ? poll.uservotes.push(req.user.username) : poll.ipvotes.push(req.ip);
       poll.save(function(err, poll) {
