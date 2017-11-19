@@ -5,14 +5,19 @@ type EventHandler = (e: any) => void;
 class CreatePoll extends React.Component<any, any> {
   submit = (e: any) => {
     e.preventDefault();
-  
+    // TODO: validate form data
+    const title = e.target.title.value;
+    let options = e.target.options.value;
+    options = Array.isArray(options) ? options : [options];
+
     fetch('/api/polls/create', {
       headers: [
         ['Accept', 'application/json'],
         ['Content-Type', 'application/json']
       ],
+      credentials: 'same-origin',
       method: 'POST',
-      body: JSON.stringify({title: 'lazyelephants poll', options: ['blah']}),
+      body: JSON.stringify({title, options}),
     })
     .then((res: any) => {
       if (res.status === 401) {
@@ -21,7 +26,8 @@ class CreatePoll extends React.Component<any, any> {
       return res.json();
     })
     .then(json => {
-      this.props.history.push(`polls/${json.poll._id}`);
+      console.log(json.poll._id);
+      this.props.history.push(`/polls/${json.poll._id}`);
     });
   }
 
@@ -36,7 +42,7 @@ class CreatePoll extends React.Component<any, any> {
 }
 
 const PollForm = ({submit}: {submit: EventHandler}) => (
-  <form onSubmit={submit}>
+  <form onSubmit={submit} name="create">
     <label htmlFor="title">Title 
       <input type="text" name="title" />
     </label>
