@@ -89,8 +89,6 @@ describe("the polls api", () => {
     });
   });
 
-  // TODO: unauthenticated users add new options
-  // TODO: authenticated users can add options to polls
   describe("PUT /api/polls/:id", () => {
     describe("An unauthenticated user can vote once per IP", () => {
       test("the first vote works", (done) => {
@@ -125,10 +123,30 @@ describe("the polls api", () => {
   });
 
   describe("Delete /api/polls/:id", () => {
-
-  })
+    test("unauthenticated users can't delete a poll", (done) => {
+      request
+        .delete(`/api/polls/${pollId}`)
+        .expect(401)
+        .end((err, res) => {
+          expect(res.body).toHaveProperty('message');
+          expect(res.body.message).toBe('Not Authorized');
+          done();
+        });
+    });
+  });
 
   describe("/api/polls/create", () => {
+    test("unauthenticated users can't create a poll", (done) => {
+      request
+        .post('/api/polls/create')
+        .send({title: "test title", options: ["option 1", "option 2"]})
+        .expect(401)
+        .end((err, res) => {
+          expect(res.body).toHaveProperty("message");
+          expect(res.body.message).toBe("Not Authorized");
+          done();
+        })
 
+    });
   });
-})
+});
