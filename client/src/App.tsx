@@ -4,6 +4,8 @@ import {
   Route, 
   Switch,  } from 'react-router-dom';
 
+import Home from './pages/Home';
+
 const App = () => (
   <BrowserRouter>
     <Switch>
@@ -17,7 +19,7 @@ const App = () => (
   </BrowserRouter>
 );
 
-const Home = () => <div>Home</div>;
+// const Home = () => <div>Home</div>;
 const NotImplemented = () => <div>Coming Soon...</div>
 const NotFound = () => <div>Uh Oh</div>;
 
