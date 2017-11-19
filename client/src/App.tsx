@@ -6,15 +6,19 @@ import {
   Switch,  } from 'react-router-dom';
 
 import Home from './pages/Home';
+import CreatePoll from './pages/CreatePoll';
 import SinglePoll from './pages/SinglePoll';
 
+// TODO: make /create, /mine into protected routes so only
+// logged in users can navigate to them
 const App = () => (
   <BrowserRouter>
     <Switch>
-      <Route path="/polls/create" component={NotImplemented} />
+      <Route path="/polls/create" component={CreatePoll} />
       <Route path="/polls/mine" component={NotImplemented} />
       <Route path="/polls/:id" component={SinglePoll} />  
       <Route path="/polls" component={() => <Redirect to="/" />} />
+      <Route path="/login" component={NotImplemented} />
       <Route exact={true} path="/" component={Home} />
       <Route component={NotFound} />
     </Switch>
