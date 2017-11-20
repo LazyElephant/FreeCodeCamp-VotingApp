@@ -14,7 +14,7 @@ class Home extends React.Component<{}, HomeStateType> {
     };
   }
   _renderPoll = (poll: any) => {
-    const {title, options, _id} = poll;
+    const {title, _id} = poll;
     return (
       <div key={_id}>
         <h3>
@@ -25,13 +25,6 @@ class Home extends React.Component<{}, HomeStateType> {
         >
           click
         </Link>
-        <ul>
-          {
-            Object
-              .keys(options)
-              .map((opt: string, i: number) => <li key={i}>{opt}</li>)
-          }
-        </ul>
       </div>
     );
   }
