@@ -1,6 +1,8 @@
-const app = require('../app');
+const app = require('../../../app');
 const request = require('supertest')(app);
 const mongoose = require('mongoose');
+
+let authCookie;
 
 afterAll(async () => {
   await mongoose.connection.collections.users.drop();
@@ -18,6 +20,7 @@ describe("The authentication Api", () => {
         .end((err, res) => {
           expect(res.body.message).toBe("User created successfully");
           expect(res.body.username).toBe("testuser");
+          authCookie = res.headers['set-cookie'].pop().split(';')[0];
           done();
         });
     });

@@ -1,14 +1,26 @@
-const app = require('../app');
+const app = require('../../../app');
 const request = require('supertest')(app);
 const mongoose = require('mongoose');
-const Poll = require('../models/poll');
-let pollId;
+const Poll = require('../../../models/poll');
+const User = require('../../../models/user');
+let poll;
 let fakeId;
 
 afterAll(async () => {
   await mongoose.connection.collections.polls.drop();
+  await mongoose.connection.collections.users.drop();
   await mongoose.disconnect();
 });
+
+beforeAll((done) => {
+  const user = new User();
+  user.username = "testuser";
+  user.hashPassword("testpassword");
+  user.save((err, user) => {
+    done();
+  })
+})
+
 
 beforeAll((done) => {
   Poll.create([
@@ -42,7 +54,10 @@ beforeAll((done) => {
       uservotes: [],
       ipvotes: [],
     }
-  ], () => done());
+  ], (err, polls) => {
+    poll = polls[0];  
+    done();
+  });
 });
 
 describe("the polls api", () => {
@@ -55,8 +70,6 @@ describe("the polls api", () => {
         expect(res.body).toHaveProperty("polls");
         expect(res.body.polls).toBeInstanceOf(Array);
         expect(res.body.polls.length).toBe(3);
-        pollId = res.body.polls[0]._id;
-        fakeId = pollId.slice(0, -1) + 'a';
         done();
       });
   });
@@ -64,7 +77,7 @@ describe("the polls api", () => {
   describe("GET /api/polls/:id", () => {
     test("If the poll exists, it's returned", (done) => {
       request
-        .get(`/api/polls/${pollId}`)
+        .get(`/api/polls/${poll._id}`)
         .expect('Content-Type', /json/)
         .expect(200)
         .end((err, res) => {
@@ -78,12 +91,12 @@ describe("the polls api", () => {
 
     test("If the poll doesn't exist, Not Found is returned", (done) => {
       request
-        .get(`/api/polls/${fakeId}`)
+        .get(`/api/polls/notAnId`)
         .expect('Content-Type', /json/)
         .expect(404)
         .end((err, res) => {
           expect(res.body).toHaveProperty("message");
-          expect(res.body.message).toBe("Not found");
+          expect(res.body.message).toBe("Not Found");
           done();
         });
     });
@@ -93,8 +106,8 @@ describe("the polls api", () => {
     describe("An unauthenticated user can vote once per IP", () => {
       test("the first vote works", (done) => {
         request
-          .put(`/api/polls/${pollId}`)
-          .send({option: "fish"})
+          .put(`/api/polls/${poll._id}`)
+          .send({option: Object.keys(poll.options)[0]})
           .expect(200)
           .end((err, res) => {
             expect(res.body).toHaveProperty("poll");
@@ -106,7 +119,7 @@ describe("the polls api", () => {
 
       test("the second vote doesn't work", (done) => {
         request
-          .put(`/api/polls/${pollId}`)
+          .put(`/api/polls/${poll._id}`)
           .send({option: "fish"})
           .expect(400)
           .end((err, res) => {
@@ -116,16 +129,12 @@ describe("the polls api", () => {
           });
       });
     });
-
-    describe("An authenticated user can vote on each poll once", () => {
-
-    });
   });
 
   describe("Delete /api/polls/:id", () => {
     test("unauthenticated users can't delete a poll", (done) => {
       request
-        .delete(`/api/polls/${pollId}`)
+        .delete(`/api/polls/${poll._id}`)
         .expect(401)
         .end((err, res) => {
           expect(res.body).toHaveProperty('message');
