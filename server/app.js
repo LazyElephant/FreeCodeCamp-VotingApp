@@ -50,11 +50,12 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
-  const message = err.message;
-
+  const isDev = process.env.NODE_ENV === 'development';
+  const message = isDev ? err.message : 'Not Found';
+  const status = isDev && err.status ? err.status : 404;
   // render the error page
-  res.status(err.status || 500);
-  res.json({success: false, message});
+  res.status(status);
+  res.json({message});
 });
 
 module.exports = app;
