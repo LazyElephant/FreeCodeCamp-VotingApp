@@ -41,9 +41,8 @@ class Home extends React.Component<{}, HomeStateType> {
     return [
       <div className="jumbotron">
         <div className="row">
-          <h1 className="offset-sm-1 col-sm-6">Pollster<br />
-            <small>Where Your Vote Counts!</small>
-          </h1>
+          <h1 className="offset-1 col-sm-11">Pollster</h1>
+          <h4 className="offset-2">Where Your Vote Counts</h4>
         </div>
       </div>,
       <div className="container">
