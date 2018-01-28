@@ -16,14 +16,11 @@ class Home extends React.Component<{}, HomeStateType> {
   _renderPoll = (poll: any) => {
     const {title, _id} = poll;
     return (
-      <div key={_id}>
-        <h3>
-          {title}
-        </h3>
-        <Link 
-          to={{ pathname: `/polls/${_id}`, state: {poll}}}
-        >
-          click
+      <div  key={_id} className="poll-list row">
+        <Link to={{ pathname: `/polls/${_id}`, state: {poll}}}>
+              <h3 className="offset-sm-2 col-sm-8 text-center">
+                {title}
+              </h3>
         </Link>
       </div>
     );
@@ -41,12 +38,18 @@ class Home extends React.Component<{}, HomeStateType> {
     const {polls} = this.state;
     
     // TODO: create a component to represent a small poll element
-    return (
-      <div>
-        <h1>Home</h1>
+    return [
+      <div className="jumbotron">
+        <div className="row">
+          <h1 className="offset-sm-1 col-sm-6">Pollster<br />
+            <small>Where Your Vote Counts!</small>
+          </h1>
+        </div>
+      </div>,
+      <div className="container">
         {polls.map(this._renderPoll)}
       </div>
-    );
+    ];
   }
 }
 
