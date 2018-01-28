@@ -10,23 +10,27 @@ import CreatePoll from './pages/CreatePoll';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import SinglePoll from './pages/SinglePoll';
+import NavBar from './components/NavBar';
 
 // TODO: make /create, /mine into protected routes so only
 // logged in users can navigate to them
 const App = () => (
-  <BrowserRouter>
-    <Switch>
-      <Route path="/polls/create" component={CreatePoll} />
-      <Route path="/polls/mine" component={NotImplemented} />
-      <Route path="/polls/:id" component={SinglePoll} />  
-      <Route path="/polls" component={() => <Redirect to="/" />} />
-      <Route path="/login" component={Login} />
-      <Route path="/signup" component={SignUp} />
-      <Route exact={true} path="/" component={Home} />
-      <Route component={NotFound} />
-    </Switch>
-  </BrowserRouter>
-);
+  <div>
+    <NavBar />
+    <BrowserRouter>
+      <Switch>
+        <Route path="/polls/create" component={CreatePoll} />
+        <Route path="/polls/mine" component={NotImplemented} />
+        <Route path="/polls/:id" component={SinglePoll} />  
+        <Route path="/polls" component={() => <Redirect to="/" />} />
+        <Route path="/login" component={Login} />
+        <Route path="/signup" component={SignUp} />
+        <Route exact={true} path="/" component={Home} />
+        <Route component={NotFound} />
+      </Switch>
+    </BrowserRouter>
+  </div>
+)
 
 // const Home = () => <div>Home</div>;
 const NotImplemented = () => <div>Coming Soon...</div>;
