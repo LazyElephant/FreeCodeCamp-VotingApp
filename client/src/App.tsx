@@ -8,6 +8,7 @@ import {
 import Home from './pages/Home';
 import CreatePoll from './pages/CreatePoll';
 import Login from './pages/Login';
+import SignUp from './pages/SignUp';
 import SinglePoll from './pages/SinglePoll';
 
 // TODO: make /create, /mine into protected routes so only
@@ -20,6 +21,7 @@ const App = () => (
       <Route path="/polls/:id" component={SinglePoll} />  
       <Route path="/polls" component={() => <Redirect to="/" />} />
       <Route path="/login" component={Login} />
+      <Route path="/signup" component={SignUp} />
       <Route exact={true} path="/" component={Home} />
       <Route component={NotFound} />
     </Switch>
