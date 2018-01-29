@@ -1,16 +1,16 @@
-import * as React from 'react';
+import * as React from 'react'
 import { 
   BrowserRouter, 
   Route, 
   Redirect,
-  Switch,  } from 'react-router-dom';
+  Switch,  } from 'react-router-dom'
 
-import Home from './pages/Home';
-import CreatePoll from './pages/CreatePoll';
-import Login from './pages/Login';
-import SignUp from './pages/SignUp';
-import SinglePoll from './pages/SinglePoll';
-import NavBar from './components/NavBar';
+import Home from './pages/Home'
+import CreatePoll from './pages/CreatePoll'
+import Login from './pages/Login'
+import SignUp from './pages/SignUp'
+import SinglePoll from './pages/SinglePoll'
+import NavBar from './components/NavBar'
 
 // TODO: make /create, /mine into protected routes so only
 // logged in users can navigate to them
@@ -32,8 +32,8 @@ const App = () => (
   </div>
 )
 
-// const Home = () => <div>Home</div>;
-const NotImplemented = () => <div>Coming Soon...</div>;
-const NotFound = () => <div>Uh Oh</div>;
+// const Home = () => <div>Home</div>
+const NotImplemented = () => <div>Coming Soon...</div>
+const NotFound = () => <div>Uh Oh</div>
 
-export default App;
+export default App

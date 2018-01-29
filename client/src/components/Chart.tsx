@@ -1,18 +1,17 @@
-import * as React from 'react';
-import { PieChart, Pie, Tooltip } from 'recharts';
+import * as React from 'react'
+import { PieChart, Pie, Tooltip } from 'recharts'
 import { ChartData } from '../typings'
 
-const Chart = ({data}:{data:ChartData[]}) => {
-  const sum = data.reduce((sum: number, poll: ChartData) => sum + poll.value, 0)
+const Chart = ({data}: {data: ChartData[]}) => {
+  const totalVotes = data.reduce((sum: number, poll: ChartData) => sum + poll.value, 0)
 
-  if (sum === 0) {
+  if (totalVotes === 0) {
     return (
       <div className="col-sm-6">
         <p>Be the first to vote on this poll!</p>
       </div>
     )
-  }
-  else {
+  } else {
     return (
       <div className="col-sm-6">
         <PieChart width={500} height={500}>
