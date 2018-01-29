@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-class Login extends React.Component<any, any> {
+class SignUp extends React.Component<any, any> {
   private username: any
   private password: any
 
@@ -17,7 +17,7 @@ class Login extends React.Component<any, any> {
     const password = this.password.value
 
     try {
-      const res = await fetch('/api/login', {
+      const res = await fetch('/api/signup', {
           headers: [
             ['Accept', 'application/json'],
             ['Content-Type', 'application/json']
@@ -32,14 +32,14 @@ class Login extends React.Component<any, any> {
       } 
 
     } catch (e) {
-      // do something with the error
+      // do something here
     }
   }
 
   render() {
     return (
       <div className="container mt-5">
-        <h2 className="mb-4">Log In</h2>
+        <h2 className="mb-4">Sign Up</h2>
         <form 
           onSubmit={this.submit} 
           name="loginForm"
@@ -66,7 +66,7 @@ class Login extends React.Component<any, any> {
             className="btn btn-primary"
             type="submit"
           >
-            Log in
+            Sign Up
           </button>
         </form>
       </div>
@@ -74,4 +74,4 @@ class Login extends React.Component<any, any> {
   }
 }
 
-export default Login
+export default SignUp

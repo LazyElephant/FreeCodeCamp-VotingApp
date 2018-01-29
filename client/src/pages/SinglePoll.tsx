@@ -1,43 +1,55 @@
-import * as React from 'react';
+import * as React from 'react'
+import Chart from '../components/Chart'
+import PollForm from '../components/PollForm'
 
 class SinglePoll extends React.Component<any, any> {
   constructor(props: any) {
-    super(props);
+    super(props)
 
     this.state = {
       owner: '',
       title: '',
       options: {}
-    };
+    }
+
+    this.onSubmit = this.onSubmit.bind(this)
   }
 
-  componentDidMount() {
-    const {id} = this.props.match.params;
+  async componentDidMount() {
+    const { poll } = this.props.location.state
+    
+    if (poll) {
+      this.setState({...poll})
+    } else {
+      const {id} = this.props.match.params
+  
+      const res = await fetch(`/api/polls/${id}`)
+      const json = await res.json()
+      if (json.poll) {
+        this.setState({...json.poll})
+      }
+    }
+  }
 
-    fetch(`/api/polls/${id}`)
-      .then(res => res.json())
-      .then(json => this.setState(json.poll));
+  onSubmit(option: string) {
+    // send vote to the api
   }
 
   render() {
-    const {title, owner, options} = this.state;
+    const {title, owner, options} = this.state
+    const optionsArray = Object.keys(options).map(key => ({name: key, value: options[key]}))
     return (
-      <div>
-        <h1>{title}</h1>
-        <p>{owner}</p>
-        <ul>
-          {
-            Object
-              .keys(options)
-              .map((k: string, i: number) => 
-                <li key={i}>
-                  {k} : {options[k]}
-                </li>)
-          }
-        </ul>
+      <div className="container">
+        <h1 className="mt-5">{title}</h1>
+        <p>by {owner}</p>
+        <hr />
+        <div className="row align-items-center mt-5" >
+          <PollForm options={optionsArray} onSubmit={this.onSubmit} />
+          <Chart data={optionsArray} />
+        </div>
       </div>
-    );
+    )
   }
 }
 
-export default SinglePoll;
+export default SinglePoll

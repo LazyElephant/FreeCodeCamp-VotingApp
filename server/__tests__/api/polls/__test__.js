@@ -31,7 +31,7 @@ beforeAll((done) => {
         chicken: 1,
         fish: 0
       },
-      uservotes: ["testuser"],
+      uservotes: ["anotheruser"],
       ipvotes: [],
     },
     {
@@ -102,8 +102,8 @@ describe("the polls api", () => {
     });
   });
 
-  describe("PUT /api/polls/:id", () => {
-    describe("An unauthenticated user can vote once per IP", () => {
+  describe("An unauthenticated user", () => {
+    describe("can vote once per poll", () => {
       test("the first vote works", (done) => {
         request
           .put(`/api/polls/${poll._id}`)
@@ -120,7 +120,7 @@ describe("the polls api", () => {
       test("the second vote doesn't work", (done) => {
         request
           .put(`/api/polls/${poll._id}`)
-          .send({option: "fish"})
+          .send({option: Object.keys(poll.options)[0]})
           .expect(400)
           .end((err, res) => {
             expect(res.body).toHaveProperty("message");
@@ -129,10 +129,8 @@ describe("the polls api", () => {
           });
       });
     });
-  });
 
-  describe("Delete /api/polls/:id", () => {
-    test("unauthenticated users can't delete a poll", (done) => {
+    test("can't delete a poll", (done) => {
       request
         .delete(`/api/polls/${poll._id}`)
         .expect(401)
@@ -142,10 +140,8 @@ describe("the polls api", () => {
           done();
         });
     });
-  });
 
-  describe("/api/polls/create", () => {
-    test("unauthenticated users can't create a poll", (done) => {
+    test("can't create a poll", (done) => {
       request
         .post('/api/polls/create')
         .send({title: "test title", options: ["option 1", "option 2"]})
@@ -155,7 +151,83 @@ describe("the polls api", () => {
           expect(res.body.message).toBe("Not Authorized");
           done();
         })
-
     });
   });
+
+  describe("An authenticated user", () => {
+    let authCookie;
+    beforeAll((done) => {
+      request
+        .post("/api/login")
+        .send({username: 'testuser', password: 'testpassword'})
+        .end((err, res) => {
+          authCookie = res.headers['set-cookie'].pop().split(';')[0];
+          done();
+        });
+    });
+
+    describe("can vote once per poll", () => {
+      test("the first vote works", (done) => {
+        request
+          .put(`/api/polls/${poll._id}`)
+          .send({option: Object.keys(poll.options)[0]})
+          .set("Cookie", [authCookie])
+          .expect(200)
+          .end((err, res) => {
+            expect(res.body).toHaveProperty("poll");
+            expect(res.body).toHaveProperty("message");
+            expect(res.body.message).toBe("Update successful");
+            done();
+          });
+      });
+
+      test("the second vote doesn't work", (done) => {
+        request
+          .put(`/api/polls/${poll._id}`)
+          .send({option: Object.keys(poll.options)[0]})
+          .set("Cookie", [authCookie])          
+          .expect(400)
+          .end((err, res) => {
+            expect(res.body).toHaveProperty("message");
+            expect(res.body.message).toBe("Each user can only vote once");
+            done();
+          });
+      });
+    });
+
+    test("Can delete their own poll", (done) => {
+      request
+      .delete(`/api/polls/${poll._id}`)
+      .set("Cookie", [authCookie])  
+      .expect(200)
+      .end((err, res) => {
+        expect(res.body).toHaveProperty("message");
+        expect(res.body.message).toBe("Poll deleted");
+        done();
+      });
+    });
+    
+    test("Can create a new poll", (done) => {
+      request
+      .post('/api/polls/create')
+      .send({title: "test title", options: ["option 1", "option 2"]})
+      .set("Cookie", [authCookie])  
+      .expect(200)
+      .end((err, res) => {
+        expect(res.body).toHaveProperty("message");
+        expect(res.body.message).toBe("Poll created successfully");
+
+        expect(res.body).toHaveProperty("poll");
+        expect(res.body.poll).toHaveProperty("title");
+        expect(res.body.poll.title).toBe("test title");
+        
+        expect(res.body.poll).toHaveProperty("options");
+        expect(res.body.poll.options).toHaveProperty("option 1");
+        expect(res.body.poll.options["option 1"]).toBe(0);
+        expect(res.body.poll.options).toHaveProperty("option 2");
+        expect(res.body.poll.options["option 2"]).toBe(0);
+        done();
+      })
+    });
+  })
 });
