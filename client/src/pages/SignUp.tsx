@@ -17,7 +17,7 @@ class SignUp extends React.Component<any, any> {
     const password = this.password.value
 
     try {
-      const res = await fetch('/api/signup', {
+      const res = await fetch('/api/register', {
           headers: [
             ['Accept', 'application/json'],
             ['Content-Type', 'application/json']
