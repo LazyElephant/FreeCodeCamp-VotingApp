@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { connect } from 'react-redux'
+import { clearRedirect, logIn } from '../actions'
 
 class Login extends React.Component<any, any> {
   private username: any
@@ -10,30 +12,44 @@ class Login extends React.Component<any, any> {
     this.submit = this.submit.bind(this)
   }
 
+  async callLogInApi(username: string, password: string) {
+    const res = await fetch('/api/login', {
+      headers: [
+        ['Accept', 'application/json'],
+        ['Content-Type', 'application/json']
+      ],
+      credentials: 'same-origin',
+      method: 'POST',
+      body: JSON.stringify({username, password}),
+    })
+    const json = await res.json()
+
+    if (res.status !== 200) {
+      return {error: res.status, message: json.message}
+    } else {
+      return json
+    }
+  }
+
   async submit(e: any) {
     e.preventDefault()
     // TODO: validate form data
     const username = this.username.value
     const password = this.password.value
-
-    try {
-      const res = await fetch('/api/login', {
-          headers: [
-            ['Accept', 'application/json'],
-            ['Content-Type', 'application/json']
-          ],
-          credentials: 'same-origin',
-          method: 'POST',
-          body: JSON.stringify({username, password}),
-        })
+  
+    const res = await this.callLogInApi(username, password)
       
-      if (res.status !== 200) {
-        // display error message
-      } 
+    if (res.error) {
+      console.error("something didn't go right: ", res.message)
+    } 
+    
+    // save user info to redux store and redirect to their intended path
+    // if they were previously redirected here
+    let redirectPath = this.props.redirectPath || '/'
 
-    } catch (e) {
-      // do something with the error
-    }
+    this.props.logIn(username)
+    this.props.history.push(redirectPath)
+    this.props.clearRedirect()
   }
 
   render() {
@@ -74,4 +90,8 @@ class Login extends React.Component<any, any> {
   }
 }
 
-export default Login
+const mapStateToProps = (state: any) => ({
+  redirectPath: state.router.redirectPath
+})
+
+export default connect(mapStateToProps, {clearRedirect, logIn})(Login)
