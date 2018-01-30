@@ -1,21 +1,18 @@
-import { Action, LOGGED_IN, LOGGED_OUT, REDIRECTED } from '../actions'
+import { Action, LOGGED_IN, LOGGED_OUT } from '../actions'
 
 const initialState = {
   isAuthenticated: false,
-  email: '',
-  redirectedFrom: '',
+  username: '',
 }
 
 export default function reducer(state: any = initialState, action: Action) {
   switch (action.type) {
     case LOGGED_IN:
-      return { ...state, isAuthenticated: true, email: action.payload }
+      return { isAuthenticated: true, username: action.payload }
     
     case LOGGED_OUT:
-      return { ...state, isAuthenticated: false, email: '' }
+      return { isAuthenticated: false, username: '' }
 
-    case REDIRECTED:
-      return { ...state, redirectedFrom: action.payload}
     default:
       return state
   }
