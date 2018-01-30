@@ -11,7 +11,9 @@ import Login from './pages/Login'
 import SignUp from './pages/SignUp'
 import SinglePoll from './pages/SinglePoll'
 import NavBar from './components/NavBar'
+import ProtectedRouteHOC from './components/ProtectedRouteHOC'
 
+const ProtectedRoute = ProtectedRouteHOC(Route)
 // TODO: make /create, /mine into protected routes so only
 // logged in users can navigate to them
 const App = () => (
@@ -19,8 +21,8 @@ const App = () => (
     <NavBar />
     <BrowserRouter>
       <Switch>
-        <Route path="/polls/create" component={CreatePoll} />
-        <Route path="/polls/mine" component={NotImplemented} />
+        <ProtectedRoute path="/polls/create" component={CreatePoll} />
+        <ProtectedRoute path="/polls/mine" component={NotImplemented} />
         <Route path="/polls/:id" component={SinglePoll} />  
         <Route path="/polls" component={() => <Redirect to="/" />} />
         <Route path="/login" component={Login} />
