@@ -37,7 +37,7 @@ class SinglePoll extends React.Component<any, any> {
 
   render() {
     const {title, owner, options} = this.state
-    const optionsArray = Object.keys(options).map(key => ({name: key, value: options[key]}))
+    const optionsArray = Object.keys(options).map(name => ({name, value: options[name]}))
     return (
       <div className="container">
         <h1 className="mt-5">{title}</h1>

@@ -20,13 +20,20 @@ function index(req, res, next) {
 }
 
 function detail(req, res, next) {
-  Poll.findOne({_id: req.params.id}, function(err, poll) {
-    if (err) 
-      return next(err);
-    if (!poll) 
-      return res.status(404).json({message: "Not found"});
-    res.status(200).json({poll});
-  });
+  Poll.findOne(
+    { _id: req.params.id },
+    "owner title options",
+    function(err, poll) 
+    {
+      if (err) 
+        return next(err);
+
+      if (!poll) 
+        return res.status(404).json({message: "Not found"});
+    
+      res.status(200).json({poll});
+    }
+  );
 }
 
 function update(req, res, next) {
@@ -57,7 +64,6 @@ function update(req, res, next) {
     req.user ? poll.uservotes.push(req.user.username) : poll.ipvotes.push(req.ip);
     poll.save(function(err, poll) {
       if (err) return next(err);
-
       res.status(200).json({message: "Update successful", poll});
     });
   })
