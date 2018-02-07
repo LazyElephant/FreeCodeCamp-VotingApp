@@ -1,31 +1,25 @@
 import * as React from 'react'
-import { PollData } from '../typings'
 
-interface Props {
-  options: PollData[]
-  onSubmit: (option: string) => void
-}
-
-class PollForm extends React.Component<Props, any> {
+class PollForm extends React.Component {
   state = {
     selectedValue: ''
   }
 
-  constructor(props: Props) {
+  constructor(props) {
     super(props)
 
     this.onSubmit = this.onSubmit.bind(this)
     this.onChange = this.onChange.bind(this)
   }
 
-  onSubmit(e: any) {
+  onSubmit(e) {
     e.preventDefault()
     if (this.state.selectedValue) {
       this.props.onSubmit(this.state.selectedValue)
     }
   }
   
-  onChange(e: any) {
+  onChange(e) {
     this.setState({selectedOption: e.target.value})
   }
 

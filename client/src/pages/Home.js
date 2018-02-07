@@ -1,19 +1,15 @@
-import * as React  from 'react'
+import React, { Component }  from 'react'
 import { Link } from 'react-router-dom'
 
-interface HomeStateType {
-  polls: string[]
-}
-
-class Home extends React.Component<{}, HomeStateType> {
-  constructor(props: any) {
+class Home extends Component {
+  constructor(props) {
     super(props)
 
     this.state = {
       polls: []
     }
   }
-  _renderPoll = (poll: any) => {
+  _renderPoll = (poll) => {
     const {title, _id} = poll
     return (
       <div  key={_id} className="poll-list row">

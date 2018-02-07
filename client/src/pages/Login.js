@@ -2,17 +2,17 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { clearRedirect, logIn } from '../actions'
 
-class Login extends React.Component<any, any> {
-  private username: any
-  private password: any
+class Login extends React.Component {
 
-  constructor(props: any) {
+  constructor(props) {
     super(props)
 
+    this.username = ''
+    this.password = ''
     this.submit = this.submit.bind(this)
   }
 
-  async callLogInApi(username: string, password: string) {
+  async callLogInApi(username, password) {
     const res = await fetch('/api/login', {
       headers: [
         ['Accept', 'application/json'],
@@ -31,7 +31,7 @@ class Login extends React.Component<any, any> {
     }
   }
 
-  async submit(e: any) {
+  async submit(e) {
     e.preventDefault()
     // TODO: validate form data
     const username = this.username.value
@@ -40,7 +40,7 @@ class Login extends React.Component<any, any> {
     const res = await this.callLogInApi(username, password)
       
     if (res.error) {
-      console.error("something didn't go right: ", res.message)
+      // console.error("something didn't go right: ", res.message)
     } 
     
     // save user info to redux store and redirect to their intended path
@@ -90,7 +90,7 @@ class Login extends React.Component<any, any> {
   }
 }
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state) => ({
   redirectPath: state.router.redirectPath
 })
 

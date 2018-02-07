@@ -2,8 +2,8 @@ import * as React from 'react'
 import Chart from '../components/Chart'
 import PollForm from '../components/PollForm'
 
-class SinglePoll extends React.Component<any, any> {
-  constructor(props: any) {
+class SinglePoll extends React.Component {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -31,7 +31,7 @@ class SinglePoll extends React.Component<any, any> {
     }
   }
 
-  onSubmit(option: string) {
+  onSubmit(option) {
     // send vote to the api
   }
 

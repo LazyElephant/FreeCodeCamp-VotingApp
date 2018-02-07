@@ -1,16 +1,15 @@
 import * as React from 'react'
 
-class SignUp extends React.Component<any, any> {
-  private username: any
-  private password: any
+class SignUp extends React.Component {
 
-  constructor(props: any) {
+  constructor(props) {
     super(props)
-
+    this.username = ''
+    this.password = ''
     this.submit = this.submit.bind(this)
   }
 
-  async submit(e: any) {
+  async submit(e) {
     e.preventDefault()
     // TODO: validate form data
     const username = this.username.value

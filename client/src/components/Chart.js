@@ -1,9 +1,8 @@
 import * as React from 'react'
 import { PieChart, Pie, Tooltip } from 'recharts'
-import { ChartData } from '../typings'
 
-const Chart = ({data}: {data: ChartData[]}) => {
-  const totalVotes = data.reduce((sum: number, poll: ChartData) => sum + poll.value, 0)
+const Chart = ({data}) => {
+  const totalVotes = data.reduce((sum, option) => sum + option.value, 0)
 
   if (totalVotes === 0) {
     return (

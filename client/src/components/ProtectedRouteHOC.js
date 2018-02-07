@@ -3,8 +3,8 @@ import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { redirected } from '../actions'
 
-export default function makeProtectedRoute(C: any): any {
-  class ProtectedRoute extends React.Component<any, any> {
+export default function makeProtectedRoute(C) {
+  class ProtectedRoute extends React.Component {
     render() {
       const { isAuthenticated, ...rest } = this.props
       if (!isAuthenticated) {
@@ -18,7 +18,7 @@ export default function makeProtectedRoute(C: any): any {
   }
 
   return connect(
-    (state: any) => ({isAuthenticated: state.user.isAuthenticated}),
+    (state) => ({isAuthenticated: state.user.isAuthenticated}),
     { redirected }
   )(ProtectedRoute)
 }

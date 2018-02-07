@@ -1,11 +1,14 @@
-import { Action, LOGGED_IN, LOGGED_OUT } from '../actions'
+import { 
+  LOGGED_IN, 
+  LOGGED_OUT 
+} from '../actions'
 
 const initialState = {
   isAuthenticated: false,
   username: '',
 }
 
-export default function reducer(state: any = initialState, action: Action) {
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case LOGGED_IN:
       return { isAuthenticated: true, username: action.payload }

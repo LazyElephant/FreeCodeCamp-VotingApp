@@ -1,9 +1,7 @@
-import * as React from 'react'
+import React, { Component } from 'react'
 
-type EventHandler = (e: any) => void
-
-class CreatePoll extends React.Component<any, any> {
-  async submit(e: any) {
+class CreatePoll extends Component {
+  async submit(e) {
     e.preventDefault()
     // TODO: validate form data
     const title = e.target.title.value
@@ -42,7 +40,7 @@ class CreatePoll extends React.Component<any, any> {
   }
 }
 
-const PollForm = ({submit}: {submit: EventHandler}) => (
+const PollForm = ({submit}) => (
   <form onSubmit={submit} name="create">
     <label htmlFor="title">Title 
       <input type="text" name="title" />
