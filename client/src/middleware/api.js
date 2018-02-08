@@ -2,13 +2,31 @@ import { Observable } from 'rxjs/Observable'
 import { 
   FETCH, 
   FETCH_COMPLETE, 
+  error,
+  logIn,
  } from '../actions';
 
-export const fetchMiddleware = (action$) => {
+export const fetchEpic = (action$) => {
   return action$.ofType(FETCH)
+    .filter(({endpoint}) => endpoint === 'index' || endpoint === 'detail' || endpoint === 'mypolls')
     .switchMap(({ endpoint, data }) => endpoints[endpoint](data))
     .map(response => ({type: FETCH_COMPLETE, response}))
 }
+
+export const authEpic = (action$) => {
+  return action$.ofType(FETCH)
+    .filter(({endpoint}) => endpoint === 'login' || endpoint ==='register')
+    .switchMap(({ endpoint, data }) => endpoints[endpoint](data))
+    .map(response => {
+      if (response.username) {
+        return logIn(response.username)
+      }
+      else {
+        return error(response.message)
+      }
+    })
+}
+
 
 const sharedParams = {
   headers: [
