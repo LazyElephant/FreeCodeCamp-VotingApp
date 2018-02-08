@@ -26,7 +26,6 @@ class Login extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(this.props, nextProps);
     if (!nextProps.username)
       return
     
