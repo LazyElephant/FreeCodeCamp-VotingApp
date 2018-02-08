@@ -4,6 +4,13 @@ export const REDIRECTED = 'REDIRECTED'
 export const CLEAR_REDIRECT = 'CLEAR_REDIRECT'
 export const FETCH = 'FETCH'
 export const FETCH_COMPLETE = 'FETCH_COMPLETE'
+export const ERROR = 'ERROR'
+
+export const error = (message) => ({
+  type: ERROR,
+  message
+})
+
 
 export function logIn(email) {
   return {
