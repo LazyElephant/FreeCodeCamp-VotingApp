@@ -1,14 +1,10 @@
 import React, { Component }  from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux';
+import { fetch as apiFetch } from '../actions'
 
 class Home extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      polls: []
-    }
-  }
+  
   _renderPoll = (poll) => {
     const {title, _id} = poll
     return (
@@ -23,16 +19,12 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    fetch('/api/polls')
-      .then(res => res.json())
-      .then(json => {
-        this.setState({polls: json.polls})
-      })
+    this.props.apiFetch('index')
   }
 
   render() {
-    const {polls} = this.state
-    
+    const polls = this.props.polls || []
+
     // TODO: create a component to represent a small poll element
     return [
       (
@@ -52,4 +44,13 @@ class Home extends Component {
   }
 }
 
-export default Home
+const mapStateToProps = ({fetch}) => {
+  return {polls: fetch.polls}
+}
+
+const mapDispatchToProps = {
+  apiFetch
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
