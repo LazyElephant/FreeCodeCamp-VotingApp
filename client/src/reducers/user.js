@@ -11,7 +11,7 @@ const initialState = {
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case LOGGED_IN:
-      return { isAuthenticated: true, username: action.payload }
+      return { isAuthenticated: true, username: action.email }
     
     case LOGGED_OUT:
       return { isAuthenticated: false, username: '' }
