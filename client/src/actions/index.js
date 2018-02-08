@@ -2,11 +2,13 @@ export const LOGGED_IN = 'LOGGED_IN'
 export const LOGGED_OUT = 'LOGGED_OUT'
 export const REDIRECTED = 'REDIRECTED'
 export const CLEAR_REDIRECT = 'CLEAR_REDIRECT'
+export const FETCH = 'FETCH'
+export const FETCH_COMPLETE = 'FETCH_COMPLETE'
 
 export function logIn(email) {
   return {
     type: LOGGED_IN,
-    payload: email
+    email
   }
 }
 
@@ -21,7 +23,7 @@ export function logOut() {
 export function redirected(path) {
   return {
     type: REDIRECTED,
-    payload: path
+    path
   }
 }
 
@@ -30,3 +32,14 @@ export function clearRedirect() {
     type: CLEAR_REDIRECT
   }
 }
+
+export const fetch = (endpoint, data) => ({
+  type: FETCH,
+  endpoint,
+  data
+})
+
+export const fetchComplete = (response) => ({
+  type: FETCH_COMPLETE,
+  response
+})

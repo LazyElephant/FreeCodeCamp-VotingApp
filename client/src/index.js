@@ -5,10 +5,11 @@ import registerServiceWorker from './registerServiceWorker'
 import './index.css'
 
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import rootReducer from './reducers'
+import middleware from './middleware'
 
-const store = createStore(rootReducer)
+const store = createStore(rootReducer, applyMiddleware(middleware))
 
 store.dispatch({type: 'LOGGED_OUT'})
 ReactDOM.render(
