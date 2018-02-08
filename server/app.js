@@ -31,8 +31,17 @@ app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator())
-app.use(session({ secret, resave: false, saveUninitialized: false}));
-
+app.use(session({ 
+  secret, 
+  resave: false, 
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000*60*60*24, // one day
+  }
+}));
+// app.use((req, res, next) => {
+//   req.session.regenerate(() => next())
+// })
 const configurePassport = require('./config/passport');
 app.use(passport.initialize());
 app.use(passport.session());
