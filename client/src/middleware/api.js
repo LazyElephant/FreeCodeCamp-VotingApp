@@ -44,5 +44,15 @@ const endpoints = {
     const url = `/api/polls/${id}`
     const params = sharedParams
     return fetchJsonObservable(url, params)
+  },
+
+  login: function({username, password}) {
+    const url='/api/login'
+    const params = {
+      ...sharedParams,
+      method: 'POST',
+      body: JSON.stringify({username, password}),
+    }
+    return fetchJsonObservable(url, params)
   }
 }

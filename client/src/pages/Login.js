@@ -1,6 +1,10 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { clearRedirect, logIn } from '../actions'
+import { 
+  clearRedirect, 
+  logIn,
+  fetch as apiFetch,
+} from '../actions'
 
 class Login extends React.Component {
 
@@ -12,44 +16,29 @@ class Login extends React.Component {
     this.submit = this.submit.bind(this)
   }
 
-  async callLogInApi(username, password) {
-    const res = await fetch('/api/login', {
-      headers: [
-        ['Accept', 'application/json'],
-        ['Content-Type', 'application/json']
-      ],
-      credentials: 'same-origin',
-      method: 'POST',
-      body: JSON.stringify({username, password}),
-    })
-    const json = await res.json()
-
-    if (res.status !== 200) {
-      return {error: res.status, message: json.message}
-    } else {
-      return json
-    }
-  }
-
-  async submit(e) {
+  submit(e) {
     e.preventDefault()
     // TODO: validate form data
     const username = this.username.value
     const password = this.password.value
   
-    const res = await this.callLogInApi(username, password)
-      
-    if (res.error) {
-      // console.error("something didn't go right: ", res.message)
-    } 
-    
-    // save user info to redux store and redirect to their intended path
-    // if they were previously redirected here
-    let redirectPath = this.props.redirectPath || '/'
+    this.props.apiFetch('login', { username, password }, )
+  }
 
-    this.props.logIn(username)
-    this.props.history.push(redirectPath)
-    this.props.clearRedirect()
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.username)
+      return
+    
+    const { 
+      logIn,
+      redirectPath, 
+      clearRedirect,
+      history,
+    } = this.props
+
+    logIn(nextProps.username)
+    history.push(redirectPath)
+    clearRedirect()
   }
 
   render() {
@@ -91,7 +80,15 @@ class Login extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  redirectPath: state.router.redirectPath
+  redirectPath: state.router.redirectPath,
+  username: state.fetch.username,
 })
 
-export default connect(mapStateToProps, {clearRedirect, logIn})(Login)
+const mapDispatchToProps = {
+  apiFetch,
+  clearRedirect,
+  logIn
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
