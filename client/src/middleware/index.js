@@ -1,5 +1,8 @@
-import { createEpicMiddleware } from 'redux-observable'
-import { fetchMiddleware } from './api'
+import { createEpicMiddleware, combineEpics } from 'redux-observable'
+import { fetchEpic, authEpic } from './api'
 import '../config/rxjs'
 
-export default createEpicMiddleware(fetchMiddleware)
+
+export default createEpicMiddleware(
+  combineEpics(fetchEpic, authEpic)
+)

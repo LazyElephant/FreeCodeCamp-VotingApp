@@ -26,15 +26,17 @@ class Login extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log(this.props, nextProps);
     if (!nextProps.username)
       return
     
-    const { 
+    let { 
       logIn,
       redirectPath, 
       clearRedirect,
       history,
     } = this.props
+    redirectPath = redirectPath || '/'
 
     logIn(nextProps.username)
     history.push(redirectPath)
@@ -81,7 +83,7 @@ class Login extends React.Component {
 
 const mapStateToProps = (state) => ({
   redirectPath: state.router.redirectPath,
-  username: state.fetch.username,
+  username: state.user.username,
 })
 
 const mapDispatchToProps = {
