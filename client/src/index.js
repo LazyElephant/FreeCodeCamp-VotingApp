@@ -8,10 +8,17 @@ import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import rootReducer from './reducers'
 import middleware from './middleware'
+import { logIn, logOut } from './actions';
 
 const store = createStore(rootReducer, applyMiddleware(middleware))
 
-store.dispatch({type: 'LOGGED_OUT'})
+let user = localStorage.getItem('LE-FCCVotingApp')
+if (user) {
+  user = JSON.parse(user)
+  user.expiration < Date.now() ? 
+    store.dispatch(logOut()) :
+    store.dispatch(logIn(user.username))
+}
 ReactDOM.render(
   <Provider store={store}>
     <App />

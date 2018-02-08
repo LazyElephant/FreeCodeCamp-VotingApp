@@ -12,10 +12,10 @@ export const error = (message) => ({
 })
 
 
-export function logIn(email) {
+export function logIn(username) {
   return {
     type: LOGGED_IN,
-    email
+    username
   }
 }
 
