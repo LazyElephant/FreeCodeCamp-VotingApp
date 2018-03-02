@@ -2,7 +2,6 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { 
   clearRedirect, 
-  logIn,
   fetch as apiFetch,
 } from '../actions'
 
@@ -30,16 +29,14 @@ class Login extends React.Component {
       return
     
     let { 
-      logIn,
       redirectPath, 
       clearRedirect,
       history,
     } = this.props
     redirectPath = redirectPath || '/'
 
-    logIn(nextProps.username)
-    history.push(redirectPath)
     clearRedirect()
+    history.push(redirectPath)
   }
 
   render() {
@@ -88,7 +85,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   apiFetch,
   clearRedirect,
-  logIn
 }
 
 
