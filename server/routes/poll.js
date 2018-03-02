@@ -64,7 +64,6 @@ function update(req, res, next) {
 
     req.user ? poll.uservotes.push(req.user.username) : poll.ipvotes.push(req.ip);
     poll.save(function(err, poll) {
-      console.log(err, poll)
       if (err) return next(err);
       res.status(200).json({message: "Update successful", poll});
     });
