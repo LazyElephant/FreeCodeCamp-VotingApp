@@ -5,17 +5,20 @@ import {
   error,
   logIn,
  } from '../actions';
+import history from '../history'
 
 export const fetchEpic = (action$) => {
-  return action$.ofType(FETCH)
-    .filter(({endpoint}) => endpoint === 'index' || endpoint === 'detail' || endpoint === 'mypolls')
+  return action$
+    .ofType(FETCH)
+    .filter(({ endpoint }) => endpoint === 'index' || endpoint === 'detail' || endpoint === 'mypolls')
     .switchMap(({ endpoint, data }) => endpoints[endpoint](data))
-    .map(response => ({type: FETCH_COMPLETE, response}))
+    .map(response => ({ type: FETCH_COMPLETE, response }))
 }
 
 export const authEpic = (action$) => {
-  return action$.ofType(FETCH)
-    .filter(({endpoint}) => endpoint === 'login' || endpoint ==='register')
+  return action$
+    .ofType(FETCH)
+    .filter(({ endpoint }) => endpoint === 'login' || endpoint ==='register')
     .switchMap(({ endpoint, data }) => endpoints[endpoint](data))
     .map(response => {
       if (response.username) {
@@ -26,6 +29,19 @@ export const authEpic = (action$) => {
       }
     })
 }
+
+export const createUpdateEpic = (action$) => {
+  return action$
+    .ofType(FETCH)
+    .filter(({ endpoint }) => endpoint === 'create' || endpoint === 'update')
+    .switchMap(({ endpoint, data }) => endpoints[endpoint](data))
+    .map(response => {
+      history.push(`/polls/${response.poll._id}`)
+      return { type: FETCH_COMPLETE, response }
+    })
+    .catch(err => error(err.message))
+}
+
 
 const sharedParams = {
   headers: [
@@ -41,12 +57,12 @@ function fetchJsonObservable(url, params) {
 
 // request creators
 const endpoints = {
-  create: function({title, options}) {
+  create: function(body) {
     const url = '/api/polls/create'
     const params = {
       ...sharedParams,
       method: 'POST',
-      body: JSON.stringify({title, options})
+      body: JSON.stringify(body)
     }
     return fetchJsonObservable(url, params)
   },
@@ -57,28 +73,28 @@ const endpoints = {
     return fetchJsonObservable(url, params)
   },
 
-  detail: function({id}) {
+  detail: function({ id }) {
     const url = `/api/polls/${id}`
     const params = sharedParams
     return fetchJsonObservable(url, params)
   },
 
-  login: function({username, password}) {
+  login: function({ username, password }) {
     const url='/api/login'
     const params = {
       ...sharedParams,
       method: 'POST',
-      body: JSON.stringify({username, password}),
+      body: JSON.stringify({ username, password }),
     }
     return fetchJsonObservable(url, params)
   },
 
-  register: function({username, password}) {
+  register: function({ username, password }) {
     const url='/api/register'
     const params = {
       ...sharedParams,
       method: 'POST',
-      body: JSON.stringify({username, password}),
+      body: JSON.stringify({ username, password }),
     }
     return fetchJsonObservable(url, params)
   },

@@ -1,4 +1,8 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { 
+  fetch as apiFetch
+} from '../actions'
 
 class CreatePoll extends Component {
   constructor() {
@@ -23,26 +27,7 @@ class CreatePoll extends Component {
     let { title, options } = this.state
     options = options.filter(option => option !== '') 
 
-    try {
-      const res = await fetch('/api/polls/create', {
-          headers: [
-            ['Accept', 'application/json'],
-            ['Content-Type', 'application/json']
-          ],
-          credentials: 'same-origin',
-          method: 'POST',
-          body: JSON.stringify({title, options}),
-        })
-
-      if (res.status === 401) {
-        return this.props.history.push('/login')
-      }
-      
-      const json = await res.json()
-      this.props.history.push(`/polls/${json.poll._id}`)
-    } catch ( e ) {
-      // do something here
-    }
+    this.props.apiFetch('create', { title, options })
   }
 
   handleChange(e) {
@@ -50,7 +35,7 @@ class CreatePoll extends Component {
 
     let title = this.formRef.title.value
     let options = Array.from(this.formRef.options).map(el => el.value)
-    if (this.state.options.length == options.length && options[options.length-1] !== '')
+    if (this.state.options.length === options.length && options[options.length-1] !== '')
       options.push('')
     this.setState({title, options})
   }
@@ -113,4 +98,8 @@ class CreatePoll extends Component {
   }
 }
 
-export default CreatePoll
+const mapDispatchToProps = {
+  apiFetch
+}
+
+export default connect(null, mapDispatchToProps)(CreatePoll)
