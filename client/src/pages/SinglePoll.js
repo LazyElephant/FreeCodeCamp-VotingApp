@@ -1,6 +1,8 @@
 import * as React from 'react'
+import { connect } from 'react-redux'
 import Chart from '../components/Chart'
 import PollForm from '../components/PollForm'
+import { fetch as apiFetch } from '../actions'
 
 class SinglePoll extends React.Component {
   constructor(props) {
@@ -32,7 +34,8 @@ class SinglePoll extends React.Component {
   }
 
   onSubmit(option) {
-    // send vote to the api
+    const { id } = this.props.match.params
+    this.props.apiFetch('vote', { id, option })
   }
 
   render() {
@@ -52,4 +55,8 @@ class SinglePoll extends React.Component {
   }
 }
 
-export default SinglePoll
+const mapDispatchToProps = {
+  apiFetch
+}
+
+export default connect(null, mapDispatchToProps)(SinglePoll)
