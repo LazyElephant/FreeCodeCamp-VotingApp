@@ -12,8 +12,11 @@ const {secret, dbURL} = require('./config/main');
 mongoose.Promise = global.Promise;
 mongoose.connect(dbURL, {useMongoClient: true});
 const db = mongoose.connection;
-// db.on('error', (err) => console.error(err));
-// db.once('open', () => console.log('db connected to: ' + dbURL));
+db.on('error', (err) => {
+  console.error(err)
+  process.exit(1)
+});
+db.once('open', () => console.log('db connected to: ' + dbURL));
 
 const api = require('./routes/api');
 
