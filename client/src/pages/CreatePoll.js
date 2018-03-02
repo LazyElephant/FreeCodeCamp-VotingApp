@@ -20,7 +20,11 @@ class CreatePoll extends Component {
       ]
     }
   }
-
+  
+  componentDidMount() {
+    this.formRef.title.focus()
+  }
+  
   async submit(e) {
     e.preventDefault()
     // TODO: validate form data
