@@ -1,10 +1,12 @@
 import * as React from 'react'
 import { 
-  BrowserRouter, 
+  Router, 
   Route, 
   Redirect,
-  Switch,  } from 'react-router-dom'
+  Switch,
+} from 'react-router-dom'
 
+import history from './history'
 import Home from './pages/Home'
 import CreatePoll from './pages/CreatePoll'
 import Login from './pages/Login'
@@ -19,7 +21,7 @@ const ProtectedRoute = ProtectedRouteHOC(Route)
 const App = () => (
   <div>
     <NavBar />
-    <BrowserRouter>
+    <Router history={history}>
       <Switch>
         <ProtectedRoute path="/polls/create" component={CreatePoll} />
         <ProtectedRoute path="/polls/mine" component={NotImplemented} />
@@ -30,7 +32,7 @@ const App = () => (
         <Route exact={true} path="/" component={Home} />
         <Route component={NotFound} />
       </Switch>
-    </BrowserRouter>
+    </Router>
   </div>
 )
 
