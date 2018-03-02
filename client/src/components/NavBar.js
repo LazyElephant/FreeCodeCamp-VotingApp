@@ -27,7 +27,7 @@ const SignOutButton = ({name, onClick}) => [
     Welcome, { name }
   </span>,
   <button 
-    className="btn btn-primary" 
+    className="btn btn-outline-secondary" 
     key="logout-button"
     onClick={onClick}
   >
