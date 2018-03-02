@@ -9,6 +9,8 @@ const OptionSchema = Schema({
     type: Number,
     default: 0,
   },
+}, {
+  usePushEach: true,
 });
 
 // TODO: update schema to store users/ips who have already voted
@@ -27,6 +29,8 @@ const PollSchema = Schema({
   },
   uservotes: [String],
   ipvotes: [String],
+}, {
+  usePushEach: true,
 });
 
 
