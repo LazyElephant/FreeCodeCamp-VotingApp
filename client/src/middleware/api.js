@@ -71,5 +71,15 @@ const endpoints = {
       body: JSON.stringify({username, password}),
     }
     return fetchJsonObservable(url, params)
-  }
+  },
+
+  register: function({username, password}) {
+    const url='/api/register'
+    const params = {
+      ...sharedParams,
+      method: 'POST',
+      body: JSON.stringify({username, password}),
+    }
+    return fetchJsonObservable(url, params)
+  },
 }

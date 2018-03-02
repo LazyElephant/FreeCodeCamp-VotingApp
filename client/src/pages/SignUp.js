@@ -1,11 +1,15 @@
 import * as React from 'react'
+import { connect } from 'react-redux'
+import { 
+  clearRedirect, 
+  fetch as apiFetch,
+} from '../actions'
 
 class SignUp extends React.Component {
 
   constructor(props) {
     super(props)
-    this.username = ''
-    this.password = ''
+
     this.submit = this.submit.bind(this)
   }
 
@@ -14,25 +18,23 @@ class SignUp extends React.Component {
     // TODO: validate form data
     const username = this.username.value
     const password = this.password.value
+    const confirmPassword = this.confirmPassword.value
+    this.props.apiFetch('register', { username, password }, )
+  }
 
-    try {
-      const res = await fetch('/api/register', {
-          headers: [
-            ['Accept', 'application/json'],
-            ['Content-Type', 'application/json']
-          ],
-          credentials: 'same-origin',
-          method: 'POST',
-          body: JSON.stringify({username, password}),
-        })
-      
-      if (res.status !== 200) {
-        // display error message
-      } 
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.username)
+      return
+    
+    let { 
+      redirectPath, 
+      clearRedirect,
+      history,
+    } = this.props
+    redirectPath = redirectPath || '/'
 
-    } catch (e) {
-      // do something here
-    }
+    clearRedirect()
+    history.push(redirectPath)
   }
 
   render() {
@@ -44,7 +46,7 @@ class SignUp extends React.Component {
           name="loginForm"
         >
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username" className="form-label">Username</label>
             <input 
               className="form-control"
               type="text"  
@@ -53,12 +55,21 @@ class SignUp extends React.Component {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="password form-label">Password</label>
+            <label htmlFor="password" className="form-label">Password</label>
             <input 
               className="form-control"
               type="password"
               name="password" 
               ref={r => this.password = r} 
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="confirm-password" className="form-label">Password</label>
+            <input 
+              className="form-control"
+              type="password"
+              name="confirm-password" 
+              ref={r => this.confirmPassword = r} 
             />
           </div>
           <button 
@@ -73,4 +84,14 @@ class SignUp extends React.Component {
   }
 }
 
-export default SignUp
+const mapStateToProps = (state) => ({
+  redirectPath: state.router.redirectPath,
+  username: state.user.username,
+})
+
+const mapDispatchToProps = {
+  apiFetch,
+  clearRedirect,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp)
