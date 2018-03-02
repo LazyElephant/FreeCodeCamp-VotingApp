@@ -18,14 +18,7 @@ export const authEpic = (action$) => {
     .filter(({endpoint}) => endpoint === 'login' || endpoint ==='register')
     .switchMap(({ endpoint, data }) => endpoints[endpoint](data))
     .map(response => {
-      // TODO: move this to localstorage middleware
       if (response.username) {
-        let expiration = Date.now() + 24*60*60*1000
-        let value = JSON.stringify({
-          username: response.username, 
-          expiration
-        })
-        localStorage.setItem('LE-FCCVotingApp', value)
         return logIn(response.username)
       }
       else {
