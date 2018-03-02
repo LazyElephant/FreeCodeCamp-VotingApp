@@ -1,15 +1,15 @@
 import * as React from 'react'
 
 class PollForm extends React.Component {
-  state = {
-    selectedValue: ''
-  }
-
   constructor(props) {
     super(props)
 
     this.onSubmit = this.onSubmit.bind(this)
     this.onChange = this.onChange.bind(this)
+    
+    this.state = {
+      selectedValue: ''
+    }
   }
 
   onSubmit(e) {
@@ -20,12 +20,11 @@ class PollForm extends React.Component {
   }
   
   onChange(e) {
-    this.setState({selectedOption: e.target.value})
+    this.setState({selectedValue: e.target.value})
   }
 
   render() {
     const { options } = this.props
-
     return (
       <form 
         onSubmit={this.onSubmit}
