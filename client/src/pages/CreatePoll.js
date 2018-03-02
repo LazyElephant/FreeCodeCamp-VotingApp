@@ -1,12 +1,27 @@
 import React, { Component } from 'react'
 
 class CreatePoll extends Component {
+  constructor() {
+    super()
+
+    this.submit = this.submit.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+
+    this.state = {
+      title: '',
+      options: [
+        '',
+        '',
+        '',
+      ]
+    }
+  }
+
   async submit(e) {
     e.preventDefault()
     // TODO: validate form data
-    const title = e.target.title.value
-    let options = e.target.options.value
-    options = Array.isArray(options) ? options : [options]
+    let { title, options } = this.state
+    options = options.filter(option => option !== '') 
 
     try {
       const res = await fetch('/api/polls/create', {
@@ -30,26 +45,72 @@ class CreatePoll extends Component {
     }
   }
 
+  handleChange(e) {
+    e.preventDefault()
+
+    let title = this.formRef.title.value
+    let options = Array.from(this.formRef.options).map(el => el.value)
+    if (this.state.options.length == options.length && options[options.length-1] !== '')
+      options.push('')
+    this.setState({title, options})
+  }
+
   render() {
+    const { title, options } = this.state
     return (
-      <div>
+      <div className="container mt-5">
         <h1>Create a Poll</h1>
-        <PollForm submit={this.submit} />
+        <form 
+          className="form"
+          onSubmit={this.submit}
+          name="create" 
+          ref={(r) => this.formRef = r}
+        >
+          <div className="form-group">
+            <label 
+              className="form-label"
+              htmlFor="title"
+              >
+              Title 
+              <input 
+                className="form-control"
+                type="text"
+                name="title"
+                value={title}
+                onChange={this.handleChange}
+               />
+            </label>
+          </div>
+          <div className="form-group">
+            <label
+              className="form-label"
+            >
+              Options 
+              {
+                options.map((option, i) =>
+                  <input
+                    key={`option-${i+1}`}
+                    className="form-control"
+                    type="text"
+                    name="options"
+                    value={option}
+                    onChange={this.handleChange}
+                  /> 
+                )
+                
+              }
+            </label>
+          </div>
+          <button 
+            className="btn btn-primary"
+            type="submit"
+          >
+            Make my Poll!
+          </button>
+        </form>
       </div>
     )
   }
 }
-
-const PollForm = ({submit}) => (
-  <form onSubmit={submit} name="create">
-    <label htmlFor="title">Title 
-      <input type="text" name="title" />
-    </label>
-    <label htmlFor="options">Options 
-      <input type="text" name="options"/>
-    </label>
-    <button type="submit">Make my Poll!</button>
-  </form>
-)
 
 export default CreatePoll
