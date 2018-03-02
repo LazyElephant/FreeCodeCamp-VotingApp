@@ -46,7 +46,7 @@ class SinglePoll extends React.Component {
         <h1 className="mt-5">{title}</h1>
         <p>by {owner}</p>
         <hr />
-        <div className="row align-items-center mt-5" >
+        <div className="row mt-5" >
           <PollForm options={optionsArray} onSubmit={this.onSubmit} />
           <Chart data={optionsArray} />
         </div>
