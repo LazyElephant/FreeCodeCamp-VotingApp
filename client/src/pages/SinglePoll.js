@@ -8,28 +8,13 @@ class SinglePoll extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      owner: '',
-      title: '',
-      options: {}
-    }
-
     this.onSubmit = this.onSubmit.bind(this)
   }
 
   async componentDidMount() {
-    const { poll } = this.props.location.state
-    
-    if (poll) {
-      this.setState({...poll})
-    } else {
+    if (!this.props.poll && !this.props.location.state.poll) {
       const {id} = this.props.match.params
-  
-      const res = await fetch(`/api/polls/${id}`)
-      const json = await res.json()
-      if (json.poll) {
-        this.setState({...json.poll})
-      }
+      this.props.apiFetch('detail', { id })
     }
   }
 
@@ -39,7 +24,8 @@ class SinglePoll extends React.Component {
   }
 
   render() {
-    const {title, owner, options} = this.state
+    const poll = this.props.poll || this.props.location.state.poll
+    const {title, owner, options} = poll
     const optionsArray = Object.keys(options).map(name => ({name, value: options[name]}))
     return (
       <div className="container">
@@ -55,8 +41,12 @@ class SinglePoll extends React.Component {
   }
 }
 
+const mapStateToProps = ({fetch}) => {
+  return {poll: fetch.poll}
+}
+
 const mapDispatchToProps = {
   apiFetch
 }
 
-export default connect(null, mapDispatchToProps)(SinglePoll)
+export default connect(mapStateToProps, mapDispatchToProps)(SinglePoll)
