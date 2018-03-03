@@ -1,9 +1,11 @@
 import { Observable } from 'rxjs/Observable'
 import { 
   FETCH, 
-  FETCH_COMPLETE, 
+  FETCH_COMPLETE,
+  LOG_OUT,
   error,
   logIn,
+  loggedOut,
  } from '../actions';
 import history from '../history'
 
@@ -30,18 +32,27 @@ export const authEpic = (action$) => {
     })
 }
 
+export const logOutEpic = (action$) => {
+  return action$
+    .ofType(LOG_OUT)
+    .map(() => endpoints.logout())
+    .map(() => loggedOut())
+}
+
 export const createUpdateEpic = (action$) => {
   return action$
     .ofType(FETCH)
-    .filter(({ endpoint }) => endpoint === 'create' || endpoint === 'update')
+    .filter(({ endpoint }) => endpoint === 'create' || endpoint === 'vote')
     .switchMap(({ endpoint, data }) => endpoints[endpoint](data))
     .map(response => {
-      history.push(`/polls/${response.poll._id}`)
-      return { type: FETCH_COMPLETE, response }
+      if (response.poll) {
+        history.push(`/polls/${response.poll._id}`, { poll: response.poll })
+        return { type: FETCH_COMPLETE, response }
+      } else {
+        return error(response.message)
+      }
     })
-    .catch(err => error(err.message))
 }
-
 
 const sharedParams = {
   headers: [
@@ -57,6 +68,16 @@ function fetchJsonObservable(url, params) {
 
 // request creators
 const endpoints = {
+  vote: function(body) {
+    const url =`/api/polls/${body.id}`
+    const params = {
+      ...sharedParams,
+      method: 'PUT',
+      body: JSON.stringify(body)
+    }
+    return fetchJsonObservable(url, params)
+  },
+
   create: function(body) {
     const url = '/api/polls/create'
     const params = {
@@ -98,4 +119,9 @@ const endpoints = {
     }
     return fetchJsonObservable(url, params)
   },
+
+  logout: function() {
+    const url='/api/logout'
+    return fetchJsonObservable(url, sharedParams)
+  }
 }

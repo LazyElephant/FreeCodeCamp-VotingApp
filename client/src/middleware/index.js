@@ -3,9 +3,10 @@ import {
   combineEpics
 } from 'redux-observable'
 import { 
-  fetchEpic, 
   authEpic,  
-  createUpdateEpic
+  createUpdateEpic,
+  fetchEpic, 
+  logOutEpic,
 } from './api'
 
 import storageMiddleware from './storage'
@@ -14,7 +15,7 @@ import '../config/rxjs'
 
 export default [
   createEpicMiddleware(
-    combineEpics(fetchEpic, authEpic, createUpdateEpic)
+    combineEpics(fetchEpic, logOutEpic, authEpic, createUpdateEpic)
   ),
   storageMiddleware
 ]
